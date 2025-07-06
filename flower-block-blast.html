@@ -73,10 +73,7 @@
             const [highScore, setHighScore] = useState(0);
 
             const generatePiece = useCallback(() => {
-                const weights = [
-                    0.03, 0.03, 0.03, 0.03, 0.03, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.05, 0.05
-                ];
-                
+                const weights = [0.05, 0.05, 0.05, 0.05, 0.05, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.05, 0.05];       
                 const random = Math.random();
                 let cumulative = 0;
                 let shapeIndex = 0;
