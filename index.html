@@ -73,7 +73,12 @@
             const [highScore, setHighScore] = useState(0);
 
             const generatePiece = useCallback(() => {
-                const weights = [0.05, 0.05, 0.05, 0.05, 0.05, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.05, 0.05];       
+                const weights = [
+                    0.05, 0.05, 0.05, 0.05, 0.05,           // Small pieces: 5% each
+                    0.125, 0.125, 0.125, 0.125, 0.125, 0.125, // Medium pieces: 12.5% each
+                    0.05, 0.05                               // Large pieces: 5% each
+                ];
+                
                 const random = Math.random();
                 let cumulative = 0;
                 let shapeIndex = 0;
@@ -249,14 +254,17 @@
 
             useEffect(() => {
                 clearLines();
-            }, [grid, clearLines]);
-
-            useEffect(() => {
-                if (checkGameOver()) {
-                    setGameOver(true);
-                    setHighScore(prev => Math.max(prev, score));
-                }
-            }, [checkGameOver, score]);
+                
+                // Check game over after a short delay to ensure grid state is settled
+                const gameOverTimer = setTimeout(() => {
+                    if (checkGameOver()) {
+                        setGameOver(true);
+                        setHighScore(prev => Math.max(prev, score));
+                    }
+                }, 100);
+                
+                return () => clearTimeout(gameOverTimer);
+            }, [grid, clearLines, checkGameOver, score]);
 
             const resetGame = () => {
                 setGrid(Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill(0)));
